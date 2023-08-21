@@ -1,0 +1,8 @@
+{
+  "name": "Sample Heroku App for Commerce Responses",
+  "description": "Sample Heroku App for Commerce Responses",
+  "repository": "https://github.com/forcedotcom/commerce-heroku-sample-response",
+  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+  "keywords": ["node", "express", "heroku"],
+  "image": "heroku/nodejs"
+}
