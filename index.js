@@ -60,8 +60,8 @@ function shippingRates228Json() {
           "status": "calculated",
           "rate": {
             "name" : "Delivery Method 1",
-            "serviceName": "Test Carrier 1", 
-            "serviceCode": "SNC9600", 
+            "serviceName": "Test Carrier 1",
+            "serviceCode": "SNC9600",
             "shipmentCost": 11.99,
             "otherCost": 5.99
           }
@@ -101,8 +101,8 @@ function shippingRates228Json(lang) {
           "status": "calculated",
           "rate": {
             "name" : deliveryMethod1,
-            "serviceName": serviceName1, 
-            "serviceCode": "SNC9600", 
+            "serviceName": serviceName1,
+            "serviceCode": "SNC9600",
             "shipmentCost": 11.99,
             "otherCost": 5.99
           }
@@ -150,6 +150,24 @@ function getSalesPrices(skus) {
             json[simpleSku] = 100.00;
         } else {
             json[simpleSku] = 0.00;
+        }
+    }
+    return json;
+}
+
+// Return the same list of SKUs with the same sale price (0.00) for each SKU
+function getSalesPricesPost(skus) {
+    if (skus == null) {
+        return {
+            "error": "Input SKUs list is empty or undefined."
+        };
+    }
+    let json = {};
+    for (const sku of skus) {
+        if (sku === 'SKU_FOR_TEST') {
+            json[sku] = 100.00;
+        } else {
+            json[sku] = 0.00;
         }
     }
     return json;
@@ -223,7 +241,7 @@ function getTaxRatesWithAdjustments(amountsBySKU, country, state, taxType) {
         const tierAdjustment = skus[key].tierAdj;
         const itemizedPromotions = skus[key].itemizedPromos;
         const quantity = skus[key].quantity;
-    
+
         if(country == 'US') {
             taxRate = 0.08;
             const noSalesTaxUSStates = ['AK', 'DE', 'MT', 'NH', 'OR'];
@@ -293,7 +311,7 @@ function getTaxRatesWithAdjustmentsPost(amountsBySKU, country, state, taxType) {
             itemizedPromotions = amountsBySKU[key].CartItemPriceAdjustments.records;
         }
         const quantity = amountsBySKU[key].Quantity;
-    
+
         if(country == 'US') {
             taxRate = 0.08;
             const noSalesTaxUSStates = ['AK', 'DE', 'MT', 'NH', 'OR'];
@@ -358,6 +376,7 @@ express()
     .get('/calculate-shipping-rates-winter-21-with-lang', (req, res) => res.json(shippingRates228Json(req.query.lang)))
     .get('/get-inventory', (req, res) => res.json(getInventory(req.query.skus)))
     .get('/get-sales-prices', (req, res) => res.json(getSalesPrices(req.query.skus)))
+    .post('/get-sales-prices', (req, res) => res.json(getSalesPricesPost(req.body.skus)))
     .get('/get-tax-rates', (req, res) => res.json(getTaxRates(req.query.amountsBySKU)))
     .get('/get-tax-rates-by-tax-type', (req, res) => res.json(getTaxRatesByTaxType(req.query.amountsBySKU, req.query.taxType)))
     .get('/get-tax-rates-with-adjustments', (req, res) => res.json(getTaxRatesWithAdjustments(req.query.amountsBySKU, req.query.country, req.query.state, req.query.taxType)))
